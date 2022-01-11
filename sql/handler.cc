@@ -1795,6 +1795,8 @@ int ha_commit_trans(THD *thd, bool all, bool ignore_global_read_lock)
     The state of XA transaction is changed to Prepared, intermediately.
     It's going to change to the regular NOTR at the end.
     The fact of the Prepared state is of interest to binary logger.
+
+    XA事务的状态在中间变为“已准备”状态。最后会变成一般的NOTR。准备状态的事实是binary logger感兴趣的。
   */
   if (!error && all && xid_state->has_state(XID_STATE::XA_IDLE))
   {

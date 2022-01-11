@@ -637,6 +637,11 @@ row_mysql_store_col_in_innobase_format(
 Convert a row in the MySQL format to a row in the Innobase format. Note that
 the function to convert a MySQL format key value to an InnoDB dtuple is
 row_sel_convert_mysql_key_to_innobase() in row0sel.cc. */
+/*
+ 将MySQL格式的行转换为Innobase格式的行。
+ 注意，将MySQL格式键值转换为InnoDB dtuple的函数是
+    row0sel.cc中的row_sel_convert_mysql_key_to_innobase()
+ */
 static
 void
 row_mysql_convert_row_to_innobase(

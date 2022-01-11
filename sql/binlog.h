@@ -840,6 +840,16 @@ public:
      @retval 0 Success
      @retval other Failure
   */
+  /*
+   刷新binlog缓存并同步到磁盘。
+   这个函数将binlog缓存中的事件刷新到二进制日志文件中，
+   它将根据系统变量'sync_binlog'的设置进行同步。
+   如果文件已同步，@c synchronized将被设置为1，否则为0。
+
+     @param[out] synced if not NULL, set to 1 if file is synchronized, otherwise 0
+     @param[in] force if TRUE, 忽略'sync_binlog'并同步文件
+
+   */
   bool flush_and_sync(const bool force= false);
   int purge_logs(const char *to_log, bool included,
                  bool need_lock_index, bool need_update_threads,

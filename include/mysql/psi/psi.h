@@ -3000,6 +3000,9 @@ extern MYSQL_PLUGIN_IMPORT PSI *PSI_server;
   with more efficient implementations, if available.
   If nothing better is available,
   make a dynamic call using the PSI_server function pointer.
+
+  允许在编译时用更有效的实现覆盖PSI_XXX_CALL，如果可用的话。
+  如果没有更好的方法，请使用PSI_server函数指针进行动态调用。
 */
 
 #define PSI_DYNAMIC_CALL(M) PSI_server->M
