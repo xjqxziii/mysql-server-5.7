@@ -1,0 +1,1152 @@
+Performing C SOURCE FILE Test HAVE_C_SHIFT_OR_OPTIMIZATION_BUG failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_09273/fast"
+/usr/bin/make -f CMakeFiles/cmTC_09273.dir/build.make CMakeFiles/cmTC_09273.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_09273.dir/src.c.o
+/usr/bin/cc   -DHAVE_C_SHIFT_OR_OPTIMIZATION_BUG  -O3 -fexpensive-optimizations   -o CMakeFiles/cmTC_09273.dir/src.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_09273
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_09273.dir/link.txt --verbose=1
+/usr/bin/cc  -DHAVE_C_SHIFT_OR_OPTIMIZATION_BUG  -O3 -fexpensive-optimizations    -rdynamic CMakeFiles/cmTC_09273.dir/src.c.o  -o cmTC_09273 
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+
+Return value: 1
+Source file was:
+
+  struct X
+  {
+    int i;
+    unsigned short s;
+  };
+
+  unsigned __attribute__((noinline)) f(struct X x)
+  {
+    return x.s | (x.i << 16);
+  }
+
+  int
+  main()
+  {
+    struct X x;
+    x.i = 0x00001234;
+    x.s = 0x5678;
+    unsigned y = f(x);
+    /* Succeed (return 0) if compiler have bug */
+    return y == 0x12345678 ? 1 : 0;
+  }
+
+Performing C++ SOURCE FILE Test HAVE_CXX_SHIFT_OR_OPTIMIZATION_BUG failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_74886/fast"
+/usr/bin/make -f CMakeFiles/cmTC_74886.dir/build.make CMakeFiles/cmTC_74886.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_74886.dir/src.cxx.o
+/usr/bin/c++    -DHAVE_CXX_SHIFT_OR_OPTIMIZATION_BUG  -O3 -fexpensive-optimizations   -o CMakeFiles/cmTC_74886.dir/src.cxx.o -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_74886
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74886.dir/link.txt --verbose=1
+/usr/bin/c++   -DHAVE_CXX_SHIFT_OR_OPTIMIZATION_BUG  -O3 -fexpensive-optimizations    -rdynamic CMakeFiles/cmTC_74886.dir/src.cxx.o  -o cmTC_74886 
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+
+Return value: 1
+Source file was:
+
+  struct X
+  {
+    int i;
+    unsigned short s;
+  };
+
+  unsigned __attribute__((noinline)) f(struct X x)
+  {
+    return x.s | (x.i << 16);
+  }
+
+  int
+  main()
+  {
+    struct X x;
+    x.i = 0x00001234;
+    x.s = 0x5678;
+    unsigned y = f(x);
+    /* Succeed (return 0) if compiler have bug */
+    return y == 0x12345678 ? 1 : 0;
+  }
+
+Performing C SOURCE FILE Test HAVE_C_FLOATING_POINT_FUSED_MADD failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_49bd0/fast"
+/usr/bin/make -f CMakeFiles/cmTC_49bd0.dir/build.make CMakeFiles/cmTC_49bd0.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_49bd0.dir/src.c.o
+/usr/bin/cc   -DHAVE_C_FLOATING_POINT_FUSED_MADD  -O3   -o CMakeFiles/cmTC_49bd0.dir/src.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_49bd0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_49bd0.dir/link.txt --verbose=1
+/usr/bin/cc  -DHAVE_C_FLOATING_POINT_FUSED_MADD  -O3    -rdynamic CMakeFiles/cmTC_49bd0.dir/src.c.o  -o cmTC_49bd0 
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+
+Return value: 1
+Source file was:
+
+  int main (int argc, char **argv)
+  {
+    double n[21] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 1, 1, 1, 1, 1, 1,1 };
+    double m= 0, s= 0;
+    int i;
+    for(i= 0; i < 21; i++)
+    {
+      double m_kminusone= m;
+      m= m_kminusone + (n[i] - m_kminusone) / (double) (i + 2);
+      s= s + (n[i] - m_kminusone) * (n[i] - m);
+    }
+    /*
+      s should now be either 5e 74 d1 45 17 5d 14 40 or
+      40 14 5d 17 45 d1 74 5e, depending on endianness. If the floating point
+      operations are optimized with fused multiply-add instructions, the least
+      significant byte is 5d instead of 5e.
+    */
+    return (*(unsigned char*)(&s) == 0x5e ||
+            *((unsigned char*)(&s) + 7) == 0x5e);
+  }
+Performing C++ SOURCE FILE Test HAVE_CXX_FLOATING_POINT_FUSED_MADD failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_34509/fast"
+/usr/bin/make -f CMakeFiles/cmTC_34509.dir/build.make CMakeFiles/cmTC_34509.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_34509.dir/src.cxx.o
+/usr/bin/c++    -DHAVE_CXX_FLOATING_POINT_FUSED_MADD  -O3   -o CMakeFiles/cmTC_34509.dir/src.cxx.o -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_34509
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_34509.dir/link.txt --verbose=1
+/usr/bin/c++   -DHAVE_CXX_FLOATING_POINT_FUSED_MADD  -O3    -rdynamic CMakeFiles/cmTC_34509.dir/src.cxx.o  -o cmTC_34509 
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+
+Return value: 1
+Source file was:
+
+  int main (int argc, char **argv)
+  {
+    double n[21] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                     0, 0, 0, 1, 1, 1, 1, 1, 1, 1,1 };
+    double m= 0, s= 0;
+    int i;
+    for(i= 0; i < 21; i++)
+    {
+      double m_kminusone= m;
+      m= m_kminusone + (n[i] - m_kminusone) / (double) (i + 2);
+      s= s + (n[i] - m_kminusone) * (n[i] - m);
+    }
+    /*
+      s should now be either 5e 74 d1 45 17 5d 14 40 or
+      40 14 5d 17 45 d1 74 5e, depending on endianness. If the floating point
+      operations are optimized with fused multiply-add instructions, the least
+      significant byte is 5d instead of 5e.
+    */
+    return (*(unsigned char*)(&s) == 0x5e ||
+            *((unsigned char*)(&s) + 7) == 0x5e);
+  }
+Performing C++ SOURCE FILE Test HAVE_LLVM_LIBCPP failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bb634/fast"
+/usr/bin/make -f CMakeFiles/cmTC_bb634.dir/build.make CMakeFiles/cmTC_bb634.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_bb634.dir/src.cxx.o
+/usr/bin/c++    -fPIC -std=gnu++03 -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_LLVM_LIBCPP   -o CMakeFiles/cmTC_bb634.dir/src.cxx.o -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_bb634
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb634.dir/link.txt --verbose=1
+/usr/bin/c++  -fPIC -std=gnu++03 -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_LLVM_LIBCPP    -rdynamic CMakeFiles/cmTC_bb634.dir/src.cxx.o  -o cmTC_bb634 
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+
+Return value: 1
+Source file was:
+
+#include <ciso646>
+int main()
+{
+#ifdef _LIBCPP_VERSION
+  return 0;
+#else
+  return 1;
+#endif
+}
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_12d31/fast"
+/usr/bin/make -f CMakeFiles/cmTC_12d31.dir/build.make CMakeFiles/cmTC_12d31.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_12d31.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_12d31.dir/CheckSymbolExists.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_12d31
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_12d31.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC     -rdynamic CMakeFiles/cmTC_12d31.dir/CheckSymbolExists.c.o  -o cmTC_12d31 
+CMakeFiles/cmTC_12d31.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_12d31.dir/build.make:97: recipe for target 'cmTC_12d31' failed
+make[1]: *** [cmTC_12d31] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_12d31/fast' failed
+make: *** [cmTC_12d31/fast] Error 2
+
+File /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_99489/fast"
+/usr/bin/make -f CMakeFiles/cmTC_99489.dir/build.make CMakeFiles/cmTC_99489.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_99489.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_99489.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_99489
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_99489.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_99489.dir/CheckFunctionExists.c.o  -o cmTC_99489 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_99489.dir/build.make:97: recipe for target 'cmTC_99489' failed
+make[1]: *** [cmTC_99489] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_99489/fast' failed
+make: *** [cmTC_99489/fast] Error 2
+
+
+Determining if the function floor exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bbb4b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_bbb4b.dir/build.make CMakeFiles/cmTC_bbb4b.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bbb4b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=floor   -o CMakeFiles/cmTC_bbb4b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+<command-line>:0:23: warning: conflicting types for built-in function 'floor' [-Wbuiltin-declaration-mismatch]
+/usr/share/cmake-3.10/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro 'CHECK_FUNCTION_EXISTS'
+   CHECK_FUNCTION_EXISTS(void);
+   ^~~~~~~~~~~~~~~~~~~~~
+Linking C executable cmTC_bbb4b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bbb4b.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=floor    -rdynamic CMakeFiles/cmTC_bbb4b.dir/CheckFunctionExists.c.o  -o cmTC_bbb4b 
+CMakeFiles/cmTC_bbb4b.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `floor'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_bbb4b.dir/build.make:97: recipe for target 'cmTC_bbb4b' failed
+make[1]: *** [cmTC_bbb4b] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_bbb4b/fast' failed
+make: *** [cmTC_bbb4b/fast] Error 2
+
+
+Determining if the function crypt exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7fc3c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7fc3c.dir/build.make CMakeFiles/cmTC_7fc3c.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7fc3c.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=crypt   -o CMakeFiles/cmTC_7fc3c.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_7fc3c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7fc3c.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=crypt    -rdynamic CMakeFiles/cmTC_7fc3c.dir/CheckFunctionExists.c.o  -o cmTC_7fc3c 
+CMakeFiles/cmTC_7fc3c.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `crypt'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_7fc3c.dir/build.make:97: recipe for target 'cmTC_7fc3c' failed
+make[1]: *** [cmTC_7fc3c] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_7fc3c/fast' failed
+make: *** [cmTC_7fc3c/fast] Error 2
+
+
+Determining if the function dlopen exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ad2ab/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ad2ab.dir/build.make CMakeFiles/cmTC_ad2ab.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ad2ab.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=dlopen   -o CMakeFiles/cmTC_ad2ab.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ad2ab
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ad2ab.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=dlopen    -rdynamic CMakeFiles/cmTC_ad2ab.dir/CheckFunctionExists.c.o  -o cmTC_ad2ab 
+CMakeFiles/cmTC_ad2ab.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `dlopen'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ad2ab.dir/build.make:97: recipe for target 'cmTC_ad2ab' failed
+make[1]: *** [cmTC_ad2ab] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ad2ab/fast' failed
+make: *** [cmTC_ad2ab/fast] Error 2
+
+
+Determining if the function timer_create exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_de108/fast"
+/usr/bin/make -f CMakeFiles/cmTC_de108.dir/build.make CMakeFiles/cmTC_de108.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_de108.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=timer_create   -o CMakeFiles/cmTC_de108.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_de108
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_de108.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=timer_create    -rdynamic CMakeFiles/cmTC_de108.dir/CheckFunctionExists.c.o  -o cmTC_de108 
+CMakeFiles/cmTC_de108.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `timer_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_de108.dir/build.make:97: recipe for target 'cmTC_de108' failed
+make[1]: *** [cmTC_de108] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_de108/fast' failed
+make: *** [cmTC_de108/fast] Error 2
+
+
+Determining if the function atomic_thread_fence exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7defe/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7defe.dir/build.make CMakeFiles/cmTC_7defe.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7defe.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=atomic_thread_fence   -o CMakeFiles/cmTC_7defe.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_7defe
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7defe.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=atomic_thread_fence    -rdynamic CMakeFiles/cmTC_7defe.dir/CheckFunctionExists.c.o  -o cmTC_7defe 
+CMakeFiles/cmTC_7defe.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `atomic_thread_fence'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_7defe.dir/build.make:97: recipe for target 'cmTC_7defe' failed
+make[1]: *** [cmTC_7defe] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_7defe/fast' failed
+make: *** [cmTC_7defe/fast] Error 2
+
+
+Determining if files ieeefp.h exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_823b6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_823b6.dir/build.make CMakeFiles/cmTC_823b6.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_823b6.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_823b6.dir/CheckIncludeFiles.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:10: fatal error: ieeefp.h: No such file or directory
+ #include <ieeefp.h>
+          ^~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_823b6.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_823b6.dir/CheckIncludeFiles.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_823b6.dir/CheckIncludeFiles.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_823b6/fast' failed
+make: *** [cmTC_823b6/fast] Error 2
+
+Source:
+/* */
+#include <ieeefp.h>
+
+
+int main(void){return 0;}
+
+Determining if files curses.h;term.h exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ac3a8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ac3a8.dir/build.make CMakeFiles/cmTC_ac3a8.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ac3a8.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_ac3a8.dir/CheckIncludeFiles.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:10: fatal error: curses.h: No such file or directory
+ #include <curses.h>
+          ^~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_ac3a8.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_ac3a8.dir/CheckIncludeFiles.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_ac3a8.dir/CheckIncludeFiles.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ac3a8/fast' failed
+make: *** [cmTC_ac3a8/fast] Error 2
+
+Source:
+/* */
+#include <curses.h>
+#include <term.h>
+
+
+int main(void){return 0;}
+
+Determining if files sys/devpoll.h exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2951a/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2951a.dir/build.make CMakeFiles/cmTC_2951a.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2951a.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_2951a.dir/CheckIncludeFiles.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:10: fatal error: sys/devpoll.h: No such file or directory
+ #include <sys/devpoll.h>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_2951a.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_2951a.dir/CheckIncludeFiles.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_2951a.dir/CheckIncludeFiles.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_2951a/fast' failed
+make: *** [cmTC_2951a/fast] Error 2
+
+Source:
+/* */
+#include <sys/devpoll.h>
+
+
+int main(void){return 0;}
+
+Determining if the function _aligned_malloc exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_273a3/fast"
+/usr/bin/make -f CMakeFiles/cmTC_273a3.dir/build.make CMakeFiles/cmTC_273a3.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_273a3.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=_aligned_malloc   -o CMakeFiles/cmTC_273a3.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_273a3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_273a3.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=_aligned_malloc    -rdynamic CMakeFiles/cmTC_273a3.dir/CheckFunctionExists.c.o  -o cmTC_273a3 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_273a3.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `_aligned_malloc'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_273a3.dir/build.make:97: recipe for target 'cmTC_273a3' failed
+make[1]: *** [cmTC_273a3] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_273a3/fast' failed
+make: *** [cmTC_273a3/fast] Error 2
+
+
+Determining if the function printstack exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5a937/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5a937.dir/build.make CMakeFiles/cmTC_5a937.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5a937.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=printstack   -o CMakeFiles/cmTC_5a937.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_5a937
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5a937.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=printstack    -rdynamic CMakeFiles/cmTC_5a937.dir/CheckFunctionExists.c.o  -o cmTC_5a937 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_5a937.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `printstack'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_5a937.dir/build.make:97: recipe for target 'cmTC_5a937' failed
+make[1]: *** [cmTC_5a937] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_5a937/fast' failed
+make: *** [cmTC_5a937/fast] Error 2
+
+
+Determining if the function directio exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_de807/fast"
+/usr/bin/make -f CMakeFiles/cmTC_de807.dir/build.make CMakeFiles/cmTC_de807.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_de807.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=directio   -o CMakeFiles/cmTC_de807.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_de807
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_de807.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=directio    -rdynamic CMakeFiles/cmTC_de807.dir/CheckFunctionExists.c.o  -o cmTC_de807 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_de807.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `directio'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_de807.dir/build.make:97: recipe for target 'cmTC_de807' failed
+make[1]: *** [cmTC_de807] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_de807/fast' failed
+make: *** [cmTC_de807/fast] Error 2
+
+
+Determining if the function compress exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d6126/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d6126.dir/build.make CMakeFiles/cmTC_d6126.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d6126.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=compress   -o CMakeFiles/cmTC_d6126.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d6126
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d6126.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=compress    -rdynamic CMakeFiles/cmTC_d6126.dir/CheckFunctionExists.c.o  -o cmTC_d6126 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_d6126.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `compress'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_d6126.dir/build.make:97: recipe for target 'cmTC_d6126' failed
+make[1]: *** [cmTC_d6126] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_d6126/fast' failed
+make: *** [cmTC_d6126/fast] Error 2
+
+
+Determining if the function gethrtime exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_cd8b1/fast"
+/usr/bin/make -f CMakeFiles/cmTC_cd8b1.dir/build.make CMakeFiles/cmTC_cd8b1.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cd8b1.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=gethrtime   -o CMakeFiles/cmTC_cd8b1.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_cd8b1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd8b1.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=gethrtime    -rdynamic CMakeFiles/cmTC_cd8b1.dir/CheckFunctionExists.c.o  -o cmTC_cd8b1 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_cd8b1.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `gethrtime'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_cd8b1.dir/build.make:97: recipe for target 'cmTC_cd8b1' failed
+make[1]: *** [cmTC_cd8b1] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_cd8b1/fast' failed
+make: *** [cmTC_cd8b1/fast] Error 2
+
+
+Determining if the function getpassphrase exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5d9de/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5d9de.dir/build.make CMakeFiles/cmTC_5d9de.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5d9de.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=getpassphrase   -o CMakeFiles/cmTC_5d9de.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_5d9de
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5d9de.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=getpassphrase    -rdynamic CMakeFiles/cmTC_5d9de.dir/CheckFunctionExists.c.o  -o cmTC_5d9de -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_5d9de.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `getpassphrase'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_5d9de.dir/build.make:97: recipe for target 'cmTC_5d9de' failed
+make[1]: *** [cmTC_5d9de] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_5d9de/fast' failed
+make: *** [cmTC_5d9de/fast] Error 2
+
+
+Determining if the function issetugid exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_aacab/fast"
+/usr/bin/make -f CMakeFiles/cmTC_aacab.dir/build.make CMakeFiles/cmTC_aacab.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_aacab.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=issetugid   -o CMakeFiles/cmTC_aacab.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_aacab
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aacab.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=issetugid    -rdynamic CMakeFiles/cmTC_aacab.dir/CheckFunctionExists.c.o  -o cmTC_aacab -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_aacab.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `issetugid'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_aacab.dir/build.make:97: recipe for target 'cmTC_aacab' failed
+make[1]: *** [cmTC_aacab] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_aacab/fast' failed
+make: *** [cmTC_aacab/fast] Error 2
+
+
+Determining if the function setfd exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4c49f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4c49f.dir/build.make CMakeFiles/cmTC_4c49f.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4c49f.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=setfd   -o CMakeFiles/cmTC_4c49f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_4c49f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4c49f.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=setfd    -rdynamic CMakeFiles/cmTC_4c49f.dir/CheckFunctionExists.c.o  -o cmTC_4c49f -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_4c49f.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `setfd'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_4c49f.dir/build.make:97: recipe for target 'cmTC_4c49f' failed
+make[1]: *** [cmTC_4c49f] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_4c49f/fast' failed
+make: *** [cmTC_4c49f/fast] Error 2
+
+
+Determining if the function strlcpy exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_01ed9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_01ed9.dir/build.make CMakeFiles/cmTC_01ed9.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_01ed9.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=strlcpy   -o CMakeFiles/cmTC_01ed9.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_01ed9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_01ed9.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=strlcpy    -rdynamic CMakeFiles/cmTC_01ed9.dir/CheckFunctionExists.c.o  -o cmTC_01ed9 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_01ed9.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `strlcpy'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_01ed9.dir/build.make:97: recipe for target 'cmTC_01ed9' failed
+make[1]: *** [cmTC_01ed9] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_01ed9/fast' failed
+make: *** [cmTC_01ed9/fast] Error 2
+
+
+Determining if the function strlcat exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e494f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_e494f.dir/build.make CMakeFiles/cmTC_e494f.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e494f.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=strlcat   -o CMakeFiles/cmTC_e494f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e494f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e494f.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=strlcat    -rdynamic CMakeFiles/cmTC_e494f.dir/CheckFunctionExists.c.o  -o cmTC_e494f -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_e494f.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `strlcat'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_e494f.dir/build.make:97: recipe for target 'cmTC_e494f' failed
+make[1]: *** [cmTC_e494f] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_e494f/fast' failed
+make: *** [cmTC_e494f/fast] Error 2
+
+
+Determining if the function fgetln exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_62451/fast"
+/usr/bin/make -f CMakeFiles/cmTC_62451.dir/build.make CMakeFiles/cmTC_62451.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_62451.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=fgetln   -o CMakeFiles/cmTC_62451.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_62451
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_62451.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=fgetln    -rdynamic CMakeFiles/cmTC_62451.dir/CheckFunctionExists.c.o  -o cmTC_62451 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_62451.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `fgetln'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_62451.dir/build.make:97: recipe for target 'cmTC_62451' failed
+make[1]: *** [cmTC_62451] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_62451/fast' failed
+make: *** [cmTC_62451/fast] Error 2
+
+
+Determining if the function tell exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ce877/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ce877.dir/build.make CMakeFiles/cmTC_ce877.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ce877.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=tell   -o CMakeFiles/cmTC_ce877.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ce877
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ce877.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=tell    -rdynamic CMakeFiles/cmTC_ce877.dir/CheckFunctionExists.c.o  -o cmTC_ce877 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_ce877.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `tell'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ce877.dir/build.make:97: recipe for target 'cmTC_ce877' failed
+make[1]: *** [cmTC_ce877] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ce877/fast' failed
+make: *** [cmTC_ce877/fast] Error 2
+
+
+Determining if the function ntohll exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5b7fd/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5b7fd.dir/build.make CMakeFiles/cmTC_5b7fd.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5b7fd.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=ntohll   -o CMakeFiles/cmTC_5b7fd.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_5b7fd
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5b7fd.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=ntohll    -rdynamic CMakeFiles/cmTC_5b7fd.dir/CheckFunctionExists.c.o  -o cmTC_5b7fd -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_5b7fd.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `ntohll'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_5b7fd.dir/build.make:97: recipe for target 'cmTC_5b7fd' failed
+make[1]: *** [cmTC_5b7fd] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_5b7fd/fast' failed
+make: *** [cmTC_5b7fd/fast] Error 2
+
+
+Determining if the function kqueue exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_456ad/fast"
+/usr/bin/make -f CMakeFiles/cmTC_456ad.dir/build.make CMakeFiles/cmTC_456ad.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_456ad.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=kqueue   -o CMakeFiles/cmTC_456ad.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_456ad
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_456ad.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=kqueue    -rdynamic CMakeFiles/cmTC_456ad.dir/CheckFunctionExists.c.o  -o cmTC_456ad -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_456ad.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `kqueue'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_456ad.dir/build.make:97: recipe for target 'cmTC_456ad' failed
+make[1]: *** [cmTC_456ad] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_456ad/fast' failed
+make: *** [cmTC_456ad/fast] Error 2
+
+
+Determining if the FIONREAD exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e9068/fast"
+/usr/bin/make -f CMakeFiles/cmTC_e9068.dir/build.make CMakeFiles/cmTC_e9068.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e9068.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_e9068.dir/CheckSymbolExists.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:10: fatal error: sys/filio.h: No such file or directory
+ #include <sys/filio.h>
+          ^~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_e9068.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_e9068.dir/CheckSymbolExists.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_e9068.dir/CheckSymbolExists.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_e9068/fast' failed
+make: *** [cmTC_e9068/fast] Error 2
+
+File /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/filio.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef FIONREAD
+  return ((int*)(&FIONREAD))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the SIGEV_PORT exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9fda4/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9fda4.dir/build.make CMakeFiles/cmTC_9fda4.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9fda4.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_9fda4.dir/CheckSymbolExists.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:4:10: fatal error: sys/siginfo.h: No such file or directory
+ #include <sys/siginfo.h>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_9fda4.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_9fda4.dir/CheckSymbolExists.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_9fda4.dir/CheckSymbolExists.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_9fda4/fast' failed
+make: *** [cmTC_9fda4/fast] Error 2
+
+File /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <signal.h>
+#include <time.h>
+#include <sys/siginfo.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef SIGEV_PORT
+  return ((int*)(&SIGEV_PORT))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function kqueue exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ccae8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ccae8.dir/build.make CMakeFiles/cmTC_ccae8.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ccae8.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=kqueue   -o CMakeFiles/cmTC_ccae8.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ccae8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ccae8.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DCHECK_FUNCTION_EXISTS=kqueue    -rdynamic CMakeFiles/cmTC_ccae8.dir/CheckFunctionExists.c.o  -o cmTC_ccae8 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_ccae8.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `kqueue'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ccae8.dir/build.make:97: recipe for target 'cmTC_ccae8' failed
+make[1]: *** [cmTC_ccae8] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ccae8/fast' failed
+make: *** [cmTC_ccae8/fast] Error 2
+
+
+Determining if the EVFILT_TIMER exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ca1fd/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ca1fd.dir/build.make CMakeFiles/cmTC_ca1fd.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ca1fd.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_ca1fd.dir/CheckSymbolExists.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:3:10: fatal error: sys/event.h: No such file or directory
+ #include <sys/event.h>
+          ^~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_ca1fd.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_ca1fd.dir/CheckSymbolExists.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_ca1fd.dir/CheckSymbolExists.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ca1fd/fast' failed
+make: *** [cmTC_ca1fd/fast] Error 2
+
+File /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/types.h>
+#include <sys/event.h>
+#include <sys/time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef EVFILT_TIMER
+  return ((int*)(&EVFILT_TIMER))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the include file netinet/in6.h exists failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_210cc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_210cc.dir/build.make CMakeFiles/cmTC_210cc.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_210cc.dir/CheckIncludeFile.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_210cc.dir/CheckIncludeFile.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: netinet/in6.h: No such file or directory
+ #include <netinet/in6.h>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_210cc.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_210cc.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_210cc.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_210cc/fast' failed
+make: *** [cmTC_210cc/fast] Error 2
+
+
+Performing C SOURCE FILE Test HAVE_SOCKADDR_IN_SIN_LEN failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4302d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4302d.dir/build.make CMakeFiles/cmTC_4302d.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4302d.dir/src.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_SOCKADDR_IN_SIN_LEN   -o CMakeFiles/cmTC_4302d.dir/src.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.c: In function 'main':
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.c:8:44: error: 'struct sockaddr_in' has no member named 'sin_len'; did you mean 'sin_zero'?
+    (void)sizeof(((struct sockaddr_in *)0)->sin_len);
+                                            ^~~~~~~
+                                            sin_zero
+CMakeFiles/cmTC_4302d.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_4302d.dir/src.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_4302d.dir/src.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_4302d/fast' failed
+make: *** [cmTC_4302d/fast] Error 2
+
+Source file was:
+
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+int main()
+{
+   (void)sizeof(((struct sockaddr_in *)0)->sin_len);
+   return 0;
+}
+
+Performing C SOURCE FILE Test HAVE_SOCKADDR_IN6_SIN6_LEN failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_abd1a/fast"
+/usr/bin/make -f CMakeFiles/cmTC_abd1a.dir/build.make CMakeFiles/cmTC_abd1a.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_abd1a.dir/src.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_SOCKADDR_IN6_SIN6_LEN   -o CMakeFiles/cmTC_abd1a.dir/src.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.c: In function 'main':
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.c:8:45: error: 'struct sockaddr_in6' has no member named 'sin6_len'; did you mean 'sin6_port'?
+    (void)sizeof(((struct sockaddr_in6 *)0)->sin6_len);
+                                             ^~~~~~~~
+                                             sin6_port
+CMakeFiles/cmTC_abd1a.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_abd1a.dir/src.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_abd1a.dir/src.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_abd1a/fast' failed
+make: *** [cmTC_abd1a/fast] Error 2
+
+Source file was:
+
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+int main()
+{
+   (void)sizeof(((struct sockaddr_in6 *)0)->sin6_len);
+   return 0;
+}
+
+Performing C SOURCE FILE Test HAVE_PTHREAD_THREADID_NP failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ca5b9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ca5b9.dir/build.make CMakeFiles/cmTC_ca5b9.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ca5b9.dir/src.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_PTHREAD_THREADID_NP   -o CMakeFiles/cmTC_ca5b9.dir/src.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.c: In function 'main':
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.c:6:3: warning: implicit declaration of function 'pthread_threadid_np'; did you mean 'pthread_create'? [-Wimplicit-function-declaration]
+   pthread_threadid_np(NULL, &tid64);
+   ^~~~~~~~~~~~~~~~~~~
+   pthread_create
+Linking C executable cmTC_ca5b9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca5b9.dir/link.txt --verbose=1
+/usr/bin/cc -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_PTHREAD_THREADID_NP    -rdynamic CMakeFiles/cmTC_ca5b9.dir/src.c.o  -o cmTC_ca5b9 -lm -lcrypt -ldl -lpthread -lrt -latomic 
+CMakeFiles/cmTC_ca5b9.dir/src.c.o: In function `main':
+src.c:(.text+0x30): undefined reference to `pthread_threadid_np'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ca5b9.dir/build.make:97: recipe for target 'cmTC_ca5b9' failed
+make[1]: *** [cmTC_ca5b9] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ca5b9/fast' failed
+make: *** [cmTC_ca5b9/fast] Error 2
+
+Source file was:
+
+#include <pthread.h>
+int main(int ac, char **av)
+{
+  unsigned long long tid64;
+  pthread_threadid_np(NULL, &tid64);
+  return (tid64 != 0 ? 0 : 1);
+}
+Performing C++ SOURCE FILE Test HAVE_IMPLICIT_DEPENDENT_NAME_TYPING failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8966f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8966f.dir/build.make CMakeFiles/cmTC_8966f.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_8966f.dir/src.cxx.o
+/usr/bin/c++  -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -std=gnu++03 -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC -DHAVE_IMPLICIT_DEPENDENT_NAME_TYPING   -o CMakeFiles/cmTC_8966f.dir/src.cxx.o -c /mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx: In member function 'void ct2<T>::func()':
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx:15:5: error: need 'typename' before 'std::vector<T>::iterator' because 'std::vector<T>' is a dependent scope
+     std::vector<T>::iterator itr = vec.begin();
+     ^~~
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx:15:30: error: expected ';' before 'itr'
+     std::vector<T>::iterator itr = vec.begin();
+                              ^~~
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx: In instantiation of 'void ct2<T>::func() [with T = double]':
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx:21:13:   required from here
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx:15:5: error: dependent-name 'std::vector<T>::iterator' is parsed as a non-type, but instantiation yields a type
+     std::vector<T>::iterator itr = vec.begin();
+     ^~~
+/mysql/BUILD/CMakeFiles/CMakeTmp/src.cxx:15:5: note: say 'typename std::vector<T>::iterator' if a type is meant
+CMakeFiles/cmTC_8966f.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_8966f.dir/src.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_8966f.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_8966f/fast' failed
+make: *** [cmTC_8966f/fast] Error 2
+
+Source file was:
+
+  #include <vector>
+  template<typename T>
+  class ct2
+  {
+  public:
+    typedef T type;
+    void func();
+  };
+
+  template<typename T>
+  void ct2<T>::func()
+  {
+    std::vector<T> vec;
+    std::vector<T>::iterator itr = vec.begin();
+  }
+
+  int main(int argc, char **argv)
+  {
+    ct2<double> o2;
+    o2.func();
+    return 0;
+  }
+  
+Determining if files numa.h exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_cf94a/fast"
+/usr/bin/make -f CMakeFiles/cmTC_cf94a.dir/build.make CMakeFiles/cmTC_cf94a.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cf94a.dir/CheckIncludeFiles.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_cf94a.dir/CheckIncludeFiles.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:10: fatal error: numa.h: No such file or directory
+ #include <numa.h>
+          ^~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_cf94a.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_cf94a.dir/CheckIncludeFiles.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_cf94a.dir/CheckIncludeFiles.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_cf94a/fast' failed
+make: *** [cmTC_cf94a/fast] Error 2
+
+Source:
+/* */
+#include <numa.h>
+
+
+int main(void){return 0;}
+
+Determining if files numaif.h exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b658e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b658e.dir/build.make CMakeFiles/cmTC_b658e.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b658e.dir/CheckIncludeFiles.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_b658e.dir/CheckIncludeFiles.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:10: fatal error: numaif.h: No such file or directory
+ #include <numaif.h>
+          ^~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_b658e.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_b658e.dir/CheckIncludeFiles.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_b658e.dir/CheckIncludeFiles.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_b658e/fast' failed
+make: *** [cmTC_b658e/fast] Error 2
+
+Source:
+/* */
+#include <numaif.h>
+
+
+int main(void){return 0;}
+
+Determining size of socklen_t failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_15290/fast"
+/usr/bin/make -f CMakeFiles/cmTC_15290.dir/build.make CMakeFiles/cmTC_15290.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_15290.dir/SIZEOF_SOCKLEN_T.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_15290.dir/SIZEOF_SOCKLEN_T.c.o   -c /mysql/BUILD/CMakeFiles/CheckTypeSize/SIZEOF_SOCKLEN_T.c
+/mysql/BUILD/CMakeFiles/CheckTypeSize/SIZEOF_SOCKLEN_T.c:23:22: error: 'socklen_t' undeclared here (not in a function); did you mean '__socklen_t'?
+ #define SIZE (sizeof(socklen_t))
+                      ^
+/mysql/BUILD/CMakeFiles/CheckTypeSize/SIZEOF_SOCKLEN_T.c:25:12: note: in expansion of macro 'SIZE'
+   ('0' + ((SIZE / 10000)%10)),
+            ^~~~
+CMakeFiles/cmTC_15290.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_15290.dir/SIZEOF_SOCKLEN_T.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_15290.dir/SIZEOF_SOCKLEN_T.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_15290/fast' failed
+make: *** [cmTC_15290/fast] Error 2
+
+/mysql/BUILD/CMakeFiles/CheckTypeSize/SIZEOF_SOCKLEN_T.c:
+#include <sys/types.h>
+#include <stdint.h>
+#include <stddef.h>
+
+
+#undef KEY
+#if defined(__i386)
+# define KEY '_','_','i','3','8','6'
+#elif defined(__x86_64)
+# define KEY '_','_','x','8','6','_','6','4'
+#elif defined(__ppc__)
+# define KEY '_','_','p','p','c','_','_'
+#elif defined(__ppc64__)
+# define KEY '_','_','p','p','c','6','4','_','_'
+#elif defined(__aarch64__)
+# define KEY '_','_','a','a','r','c','h','6','4','_','_'
+#elif defined(__ARM_ARCH_7A__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','A','_','_'
+#elif defined(__ARM_ARCH_7S__)
+# define KEY '_','_','A','R','M','_','A','R','C','H','_','7','S','_','_'
+#endif
+
+#define SIZE (sizeof(socklen_t))
+char info_size[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)),
+  ']',
+#ifdef KEY
+  ' ','k','e','y','[', KEY, ']',
+#endif
+  '\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_size[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining if the SHA512_DIGEST_LENGTH exist failed with the following output:
+Change Dir: /mysql/BUILD/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2016d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2016d.dir/build.make CMakeFiles/cmTC_2016d.dir/build
+make[1]: Entering directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2016d.dir/CheckSymbolExists.c.o
+/usr/bin/cc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fPIC -fabi-version=2 -fno-omit-frame-pointer -fno-strict-aliasing  -fPIC    -o CMakeFiles/cmTC_2016d.dir/CheckSymbolExists.c.o   -c /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:10: fatal error: openssl/sha.h: No such file or directory
+ #include <openssl/sha.h>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_2016d.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_2016d.dir/CheckSymbolExists.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_2016d.dir/CheckSymbolExists.c.o] Error 1
+make[1]: Leaving directory '/mysql/BUILD/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_2016d/fast' failed
+make: *** [cmTC_2016d/fast] Error 2
+
+File /mysql/BUILD/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <openssl/sha.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef SHA512_DIGEST_LENGTH
+  return ((int*)(&SHA512_DIGEST_LENGTH))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
